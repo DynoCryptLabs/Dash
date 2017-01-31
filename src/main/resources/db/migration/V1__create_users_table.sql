@@ -8,6 +8,9 @@ CREATE TABLE IF NOT EXISTS "users"
   access_token  VARCHAR(255),
   is_active     BOOLEAN DEFAULT TRUE,
   is_admin      BOOLEAN DEFAULT TRUE,
+  created_at    TIMESTAMP DEFAULT now(),
+  updated_at    TIMESTAMP DEFAULT now(),
+
   UNIQUE (email),
   UNIQUE (access_token)
 );

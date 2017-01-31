@@ -5,7 +5,6 @@ import com.dynocryptlabs.Dash.Database.Utilities.PasswordStorage;
 import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.dao.LruObjectCache;
-import com.j256.ormlite.field.DataType;
 import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.misc.TransactionManager;
 import com.j256.ormlite.stmt.QueryBuilder;
@@ -36,6 +35,8 @@ public class User {
     public static final String USER_FIELD_ACCESS_TOKEN = "access_token";
     public static final String USER_FIELD_IS_ACTIVE = "is_active";
     public static final String USER_FIELD_IS_ADMIN = "is_admin";
+    public static final String USER_FIELD_CREATED_AT = "created_at";
+    public static final String USER_FIELD_UPDATED_AT = "updated_at";
 
     @DatabaseField(generatedId = true, columnName = USER_FIELD_ID)
     private Integer id;
@@ -61,10 +62,10 @@ public class User {
     @DatabaseField(columnName = USER_FIELD_IS_ADMIN, canBeNull = false, defaultValue = "false")
     private Boolean admin;
 
-    @DatabaseField(columnName = "created_at", canBeNull = false, defaultValue = "now()")
+    @DatabaseField(columnName = USER_FIELD_CREATED_AT, canBeNull = false, defaultValue = "now()")
     private Date createdAt;
 
-    @DatabaseField(columnName = "updated_at", canBeNull = false, defaultValue = "now()")
+    @DatabaseField(columnName = USER_FIELD_UPDATED_AT, canBeNull = false, defaultValue = "now()")
     private Date updatedAt;
 
     //================================================================================
@@ -163,6 +164,7 @@ public class User {
     }
 
     public Boolean update() throws SQLException {
+        this.updatedAt = new Date();
         User.getUserDAO().update(this);
         return true;
     }
@@ -241,5 +243,13 @@ public class User {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }

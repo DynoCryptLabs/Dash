@@ -5,11 +5,10 @@ import com.j256.ormlite.dao.Dao;
 import com.j256.ormlite.dao.DaoManager;
 import com.j256.ormlite.dao.LruObjectCache;
 import com.j256.ormlite.field.DatabaseField;
-import com.j256.ormlite.stmt.QueryBuilder;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Date;
 
 /**
  * Created by rohanpanchal on 1/17/17.
@@ -23,12 +22,20 @@ public class Team {
 
     public static final String TEAM_FIELD_ID = "id";
     public static final String TEAM_FIELD_NAME = "name";
+    public static final String TEAM_FIELD_CREATED_AT = "created_at";
+    public static final String TEAM_FIELD_UPDATED_AT = "updated_at";
 
     @DatabaseField(generatedId = true, columnName = TEAM_FIELD_ID)
     private Integer id;
 
     @DatabaseField(columnName = TEAM_FIELD_NAME)
     private String name;
+
+    @DatabaseField(columnName = TEAM_FIELD_CREATED_AT, canBeNull = false, defaultValue = "now()")
+    private Date createdAt;
+
+    @DatabaseField(columnName = TEAM_FIELD_UPDATED_AT, canBeNull = false, defaultValue = "now()")
+    private Date updatedAt;
 
     //================================================================================
     // Constructors
@@ -73,6 +80,16 @@ public class Team {
     }
 
     //================================================================================
+    // Instance Operations
+    //================================================================================
+
+    public Boolean update() throws SQLException {
+        this.updatedAt = new Date();
+        Team.getTeamDAO().update(this);
+        return true;
+    }
+
+    //================================================================================
     // Instance Methods
     //================================================================================
 
@@ -86,5 +103,13 @@ public class Team {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }

@@ -8,6 +8,7 @@ import com.j256.ormlite.field.DatabaseField;
 import com.j256.ormlite.table.DatabaseTable;
 
 import java.sql.SQLException;
+import java.util.Date;
 
 /**
  * Created by rohanpanchal on 1/17/17.
@@ -22,6 +23,8 @@ public class UserTeam {
     public static final String USER_TEAM_FIELD_USER_ID = "user_id";
     public static final String USER_TEAM_FIELD_TEAM_ID = "team_id";
     public static final String USER_TEAM_FIELD_IS_ADMIN = "is_admin";
+    public static final String USER_TEAM_FIELD_CREATED_AT = "created_at";
+    public static final String USER_TEAM_FIELD_UPDATED_AT = "updated_at";
 
     @DatabaseField(foreign = true, columnName = USER_TEAM_FIELD_USER_ID, foreignColumnName = "id")
     private User user;
@@ -31,6 +34,13 @@ public class UserTeam {
 
     @DatabaseField(columnName = USER_TEAM_FIELD_IS_ADMIN, canBeNull = false, defaultValue = "false")
     private Boolean admin;
+
+
+    @DatabaseField(columnName = USER_TEAM_FIELD_CREATED_AT, canBeNull = false, defaultValue = "now()")
+    private Date createdAt;
+
+    @DatabaseField(columnName = USER_TEAM_FIELD_UPDATED_AT, canBeNull = false, defaultValue = "now()")
+    private Date updatedAt;
 
     //================================================================================
     // Constructors
@@ -105,5 +115,13 @@ public class UserTeam {
 
     public void setAdmin(Boolean admin) {
         this.admin = admin;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
     }
 }

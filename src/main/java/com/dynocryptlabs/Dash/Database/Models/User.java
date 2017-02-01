@@ -111,6 +111,14 @@ public class User {
         return userTeam.getUser();
     }
 
+    public static User findFromAccessToken(String accessToken) throws SQLException {
+        return User.getUserDAO()
+                .queryBuilder()
+                .where()
+                .eq(USER_FIELD_ACCESS_TOKEN, accessToken)
+                .queryForFirst();
+    }
+
     //================================================================================
     // Operations
     //================================================================================

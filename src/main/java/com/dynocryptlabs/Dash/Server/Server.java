@@ -1,6 +1,9 @@
 package com.dynocryptlabs.Dash.Server;
 
 
+import com.dynocryptlabs.Dash.Database.Models.User;
+import com.dynocryptlabs.Dash.Server.Requests.RegisterUserRequest;
+import com.dynocryptlabs.Dash.Server.Utilities.AuthFilter;
 import com.dynocryptlabs.Dash.Server.Utilities.SparkJsonTransformer;
 import spark.Service;
 
@@ -38,12 +41,28 @@ public class Server {
      */
     private void start() {
 
+        this.service.before(new AuthFilter("/@me"));
+        this.service.before(new AuthFilter("/@me/*"));
+
         // Default Routes
         this.service.get("/", (request, response) -> {
             response.status(200);
             return null;
         }, this.jsonTransformer);
 
+        this.service.post("/user", (request, response) -> {
+            RegisterUserRequest registerUserRequest = this.jsonTransformer.parseRequest(RegisterUserRequest.class, request);
+
+            return User.registerUser(registerUserRequest.getEmail(),
+                    registerUserRequest.getPassword(),
+                    registerUserRequest.getFirstName(),
+                    registerUserRequest.getLastName(),
+                    false);
+        }, this.jsonTransformer);
+
+        this.service.get("/@me", (request, response) -> {
+            return request.session().attribute("user");
+        }, this.jsonTransformer);
     }
 
     /**
